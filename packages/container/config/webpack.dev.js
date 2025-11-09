@@ -16,14 +16,10 @@ const devConfig = {
     new ModuleFederationPlugin({
       name: "container",
       remotes: {
-        Marketing: "Marketing@http://localhost:8081/remoteEntry.js",
+        marketing: "marketing@http://localhost:8081/remoteEntry.js",
         Feed: "Feed@http://localhost:8082/remoteEntry.js",
       },
       shared: packageJson.dependencies,
-    }),
-
-    new HTMLWebpackPlugin({
-      template: "./public/index.html",
     }),
   ],
 };

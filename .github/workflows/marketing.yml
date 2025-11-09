@@ -1,16 +1,16 @@
-name: deploy-container
+name: deploy-marketing
 
 on:
   push:
     branches:
       - main
     paths:
-      - "packages/container/**"
+      - "packages/marketing/**"
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: packages/container
+    working-directory: packages/marketing
 
 jobs:
   build-and-deploy:
@@ -27,8 +27,6 @@ jobs:
       # 3️⃣ Build project
       - name: Build project
         run: npm run build
-        env:
-          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }}
 
       # 4️⃣ Configure AWS credentials
       - name: Configure AWS
@@ -41,12 +39,12 @@ jobs:
       # 5️⃣ Upload to S3 with cache headers
       - name: Upload build to S3
         run: |
-          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest \
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/marketing/latest \
             --delete \
             --cache-control "max-age=31536000,immutable" \
             --exact-timestamps
           # Also upload HTML with no-cache so browser always fetches new index
-          aws s3 cp dist/index.html s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest/index.html \
+          aws s3 cp dist/index.html s3://${{ secrets.AWS_S3_BUCKET_NAME }}/marketing/latest/remoteEntry.js \
             --cache-control "max-age=0,no-cache,no-store,must-revalidate" \
             --content-type "text/html"
 
@@ -55,4 +53,4 @@ jobs:
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/container/latest/index.html"
+            --paths "/marketing/latest/index.html"
