@@ -1,14 +1,14 @@
 import React, { useRef, useEffect } from "react";
-import { mount } from "marketing/MarketingApp";
+import { mount } from "auth/AuthApp";
 import { useHistory } from "react-router-dom";
 
-export default () => {
+export default ({onSignIn}) => {
   const ref = useRef(null);
   const history = useHistory();
 
   useEffect(() => {
     const { onParentNavigate } = mount(ref.current, {
-      initialPath: history.location.pathname,
+        initialPath: history.location.pathname,
       onNavigate: ( nextPathname) => {
         const { pathname } = history.location;
         if( pathname !== nextPathname){
@@ -16,6 +16,11 @@ export default () => {
         }
      //   console.log("Container noticed navigation in Marketing:", nextPathname);
       },
+      onSignIn: () => {
+        //history.push('/dashboard');
+        console.log('+++++signed in+++++');
+        onSignIn();
+      }
     });
 
     history.listen(onParentNavigate)
