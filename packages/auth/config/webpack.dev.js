@@ -2,7 +2,7 @@ const { merge } = require("webpack-merge");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const commonConfig = require("./webpack.common.js");
-const packageJson = require("../package.json");
+const  packageJson  = require("../package.json");
 
 const devConfig = {
   mode: "development",
@@ -22,7 +22,7 @@ const devConfig = {
       exposes: {
         "./AuthApp": "./src/bootstrap",
       },
-      shared: packageJson.dependencies,
+      shared :  packageJson.dependencies,
     }),
 
     new HTMLWebpackPlugin({
